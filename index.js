@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
 const mediaItems = [
-{ id: 1, type: 'image', src: '[https://picsum.photos/seed/filmmaker1/800/600](https://picsum.photos/seed/filmmaker1/800/600)', title: 'Amanecer en las montañas', description: 'Una toma matutina capturando la primera luz.' },
+{ id: 1, type: 'image', src: '[https://youtu.be/Sx0ONIEfUqE?si=TgkizJWKN7--QjS-', title: 'Amanecer en las montañas', description: 'Una toma matutina capturando la primera luz.' },
 { id: 2, type: 'video', src: '[https://picsum.photos/seed/filmmaker2/800/600](https://picsum.photos/seed/filmmaker2/800/600)', title: 'El Aliento del Océano', description: 'Captura en cámara lenta de las olas rompiendo en la orilla.' },
 { id: 3, type: 'image', src: '[https://picsum.photos/seed/filmmaker3/800/600](https://picsum.photos/seed/filmmaker3/800/600)', title: 'Jungla Urbana', description: 'Una larga exposición del tráfico de la ciudad por la noche.' },
 { id: 4, type: 'image', src: '[https://picsum.photos/seed/filmmaker4/800/600](https://picsum.photos/seed/filmmaker4/800/600)', title: 'Quietud del Bosque', description: 'Rayos de sol atravesando el denso dosel del bosque.' },
