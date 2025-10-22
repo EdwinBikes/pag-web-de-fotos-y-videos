@@ -2,40 +2,120 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  // --- FUNCIÓN PARA CREAR MODAL DE VIDEO ---
+  const createVideoModal = (videoSrc) => {
+    // Inyecta estilos para la animación del modal
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+      .modal-fade-in { animation: fadeIn 0.3s ease-out; }
+    `;
+    document.head.appendChild(style);
+
+    // Crea el overlay del modal
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-[100] p-4 modal-fade-in';
+    
+    // Contenedor del contenido del modal
+    const modalContent = document.createElement('div');
+    modalContent.className = 'relative w-full max-w-4xl';
+    modalContent.innerHTML = `
+        <button class="absolute -top-2 -right-2 h-10 w-10 bg-black bg-opacity-50 rounded-full flex items-center justify-center text-white text-2xl z-10 hover:bg-opacity-75 transition-colors" aria-label="Cerrar video">&times;</button>
+        <video src="${videoSrc}" class="w-full h-auto max-h-[85vh] rounded-lg shadow-2xl" controls autoplay></video>
+    `;
+    
+    modalOverlay.appendChild(modalContent);
+    document.body.appendChild(modalOverlay);
+    document.body.style.overflow = 'hidden'; // Evita el scroll del fondo
+
+    // Función para cerrar el modal
+    const close = () => {
+        modalOverlay.remove();
+        style.remove(); // Limpia los estilos inyectados
+        document.body.style.overflow = '';
+    };
+
+    const escapeHandler = (e) => {
+      if (e.key === 'Escape') {
+        close();
+        document.removeEventListener('keydown', escapeHandler);
+      }
+    };
+
+    // Event listeners para cerrar
+    modalContent.querySelector('button').addEventListener('click', close);
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) close();
+    });
+    document.addEventListener('keydown', escapeHandler);
+  };
+
   // --- PORTAFOLIO ---
   const mediaItems = [
-    { id: 1, type: 'image', src: 'https://picsum.photos/seed/filmmaker1/800/600', title: 'Amanecer en las montañas', description: 'Una toma matutina capturando la primera luz.' },
-    { id: 2, type: 'video', src: 'https://picsum.photos/seed/filmmaker2/800/600', title: 'El Aliento del Océano', description: 'Captura en cámara lenta de las olas rompiendo en la orilla.' },
-    { id: 3, type: 'image', src: 'https://picsum.photos/seed/filmmaker3/800/600', title: 'Jungla Urbana', description: 'Una larga exposición del tráfico de la ciudad por la noche.' },
-    { id: 4, type: 'image', src: 'https://picsum.photos/seed/filmmaker4/800/600', title: 'Quietud del Bosque', description: 'Rayos de sol atravesando el denso dosel del bosque.' },
-    { id: 5, type: 'video', src: 'https://picsum.photos/seed/filmmaker5/800/600', title: 'Espejismo del Desierto', description: 'Ondas de calor que se elevan desde el suelo del desierto.' },
-    { id: 6, type: 'image', src: 'https://picsum.photos/seed/filmmaker6/800/600', title: 'Retrato de un Desconocido', description: 'Una foto espontánea de fotografía callejera.' },
-    { id: 7, type: 'image', src: 'https://picsum.photos/seed/filmmaker7/800/600', title: 'Líneas Arquitectónicas', description: 'Vista abstracta de un edificio moderno.' },
-    { id: 8, type: 'video', src: 'https://picsum.photos/seed/filmmaker8/800/600', title: 'Noche Estrellada', description: 'Un timelapse de la vía láctea.' },
-    { id: 9, type: 'image', src: 'https://picsum.photos/seed/filmmaker9/800/600', title: 'Reflejos de Neón', description: 'Luces de la ciudad reflejadas en un charco después de la lluvia.' },
-    { id: 10, type: 'video', src: 'https://picsum.photos/seed/filmmaker10/800/600', title: 'Vuelo del Águila', description: 'Toma aérea siguiendo a un águila en su vuelo majestuoso.' },
-    { id: 11, type: 'image', src: 'https://picsum.photos/seed/filmmaker11/800/600', title: 'Mercado Vibrante', description: 'Escena colorida de un bullicioso mercado local.' },
-    { id: 12, type: 'image', src: 'https://picsum.photos/seed/filmmaker12/800/600', title: 'Caminos Helados', description: 'Un paisaje invernal con un río congelado.' }
+    { id: 1, type: 'image', src: 'https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', title: 'Amanecer en las montañas', description: 'Una toma matutina capturando la primera luz.' },
+    { id: 2, type: 'video', src: 'https://images.pexels.com/videos/4784401/pexels-photo-4784401.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', videoSrc: 'https://videos.pexels.com/video-files/4784401/4784401-hd_1280_720_25fps.mp4', title: 'Ciclista en el bosque', description: 'Atravesando un sendero forestal.' },
+    { id: 3, type: 'image', src: 'https://images.pexels.com/photos/3225517/pexels-photo-3225517.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', title: 'Costa Escondida', description: 'Explorando las joyas ocultas de la costa.' },
+    { id: 4, type: 'video', src: 'https://images.pexels.com/videos/854412/pexels-photo-854412.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', videoSrc: 'https://videos.pexels.com/video-files/854412/854412-hd_1280_720_24fps.mp4', title: 'Vuelo de Dron Urbano', description: 'Una vista de pájaro del paisaje de la ciudad.' },
+    { id: 5, type: 'image', src: 'https://images.pexels.com/photos/1001682/pexels-photo-1001682.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', title: 'Olas del Océano', description: 'El poder y la serenidad del mar.' },
+    { id: 6, type: 'video', src: 'https://images.pexels.com/videos/4434246/pexels-photo-4434246.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', videoSrc: 'https://videos.pexels.com/video-files/4434246/4434246-hd_1280_720_25fps.mp4', title: 'Café por la Mañana', description: 'Un momento tranquilo para empezar el día.' },
   ];
-  
-  const portfolioGrid = document.querySelector('#portfolio-section .grid');
-  mediaItems.forEach(item => {
-    const div = document.createElement('div');
-    div.className = "group relative overflow-hidden rounded-lg shadow-lg bg-gray-800";
-    div.innerHTML = `
-        <img src="${item.src}" alt="${item.title}" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110" />
-        ${item.type === 'video' ? `
-          <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-            <svg class="w-16 h-16 text-white opacity-80" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
-          </div>` : ''}
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-          <div class="absolute bottom-0 left-0 p-4">
-            <h3 class="text-xl font-bold text-white">${item.title}</h3>
-            <p class="text-sm text-gray-300">${item.description}</p>
-          </div>
-        </div>
-    `;
-    portfolioGrid.appendChild(div);
-  });
 
+  const portfolioContainer = document.querySelector('#portfolio-section .grid');
+
+  if (portfolioContainer) {
+    mediaItems.forEach(item => {
+      const itemElement = document.createElement('div');
+      itemElement.className = 'group relative overflow-hidden rounded-lg shadow-lg cursor-pointer transform hover:-translate-y-1 transition-transform duration-300 h-64';
+      itemElement.setAttribute('aria-label', item.title);
+
+      let mediaElementHTML = '';
+      if (item.type === 'image') {
+        mediaElementHTML = `<img src="${item.src}" alt="${item.title}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">`;
+      } else if (item.type === 'video') {
+        mediaElementHTML = `
+          <video 
+            src="${item.videoSrc}" 
+            poster="${item.src}" 
+            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" 
+            muted 
+            loop 
+            playsinline
+          ></video>
+          <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white opacity-70" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+            </svg>
+          </div>
+        `;
+      }
+
+      itemElement.innerHTML = `
+        ${mediaElementHTML}
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 p-4 w-full">
+          <h3 class="text-xl font-bold text-white truncate">${item.title}</h3>
+          <p class="text-sm text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300">${item.description}</p>
+        </div>
+      `;
+
+      if (item.type === 'video') {
+        const video = itemElement.querySelector('video');
+        if (video) {
+          itemElement.addEventListener('mouseenter', () => {
+             // La reproducción devuelve una promesa, que puede ser rechazada si el usuario aún no ha interactuado con la página.
+             video.play().catch(error => console.log("Auto-play prevented: ", error));
+          });
+          itemElement.addEventListener('mouseleave', () => {
+             video.pause();
+             video.currentTime = 0; // Rebobina el video
+          });
+          itemElement.addEventListener('click', () => {
+            createVideoModal(item.videoSrc);
+          });
+        }
+      }
+      
+      portfolioContainer.appendChild(itemElement);
+    });
+  }
 });
